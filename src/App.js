@@ -3,57 +3,79 @@ import logo from './logo.svg';
 import React, {useState} from "react";
 // {useState} 상단에 첨부 --> 리액트의 데이터 저장공간 state 만드는 법
 import './App.css';
+import {findDOMNode} from "react-dom";
 
 function App() {
     // var [a,b] = [10,100];
     // 데이터는 1. 변수에 넣거나 2. state 에 넣거나
-    let posts = '강남 고기 맛집';
-    let [따봉, 따봉변경] = useState(0);
-    //  따봉변경으로 따봉 값을 변경시켜야함
-    let [글제목2, 글제목변경2] = useState([ '여자 코트 추천', '덕소 맛집', '쌀국수 맛집 추천'])
-    let [글제목, 글제목변경] = useState(['곱창 맛집 추천', '덕소 맛집', '쌀국수 맛집 추천','여자 코트 추천']);
+    let [like, relike] = useState(0);
+    let [like2, relike2] = useState(0);
+    let [like3, relike3] = useState(0);
+    let [글제목, 글제목변경] = useState(['곱창 맛집 추천', '덕소 맛집', '쌀국수 맛집 추천']);
     // useState 는 항상 [state 데이터, state 데이터 변경 함수] 가 들어감
-    // state 변경함수로 state 를 변경해야함
-    // a 에는 '값' 이 들어가고, b 에는 '값' 을 변경하는 함수가 들어감
-    // 웹이 App 처럼 동작하게 만들려면 state 에 데이터를 저장해야함
-    // state 는 데이터가 변경될 때 HTML 이 자동으로 재렌더링 된다. = HTML 이 새로고침 없이도 스무스하게 변경됨
-    // 자주 바뀌는, 중요한 데이터는 변수말고 state 로 저장해서 사용
     // array, Object state 데이터 수정 방법 : 일단 변경함수 사용, 변경함수(대체할데이터), state 는 직접 변경X, deep copy 해서 그걸 건드려야함
-    function 제목바꾸기(){
-        var newArray = [...글제목]; // deep copy : 값 공유를 하지않고 서로 독립적인 값을 가지는 복사, state 의 복사본을 만들어서
-        newArray[0] = '붕어빵 맛집 추천';    // 수정
-        글제목변경(newArray);
-    }
-    function 정렬(){
 
+    function titleChange(){
+        var newArray = [...글제목];
+        if(newArray[0] === '곱창 맛집 추천'){
+            newArray[0] = '붕어빵 맛집 추천';
+            글제목변경(newArray);
+        } else {
+            newArray[0] = '곱창 맛집 추천';
+            글제목변경(newArray);
+        }
     }
+
+    var arrLike = [like,like2,like3];
+    function LikeSort(){
+        var Array = [...글제목];
+        var likeArray = [...arrLike];
+        if(likeArray[0] < likeArray[1]){
+            Array[0] = '덕소 맛집';
+            Array[1] = '붕어빵 맛집 추천';
+            글제목변경(Array);
+        } else if(likeArray[1] < likeArray[2]){
+            Array[0] = '쌀국수 맛집 추천';
+            Array[1] = '덕소 맛집';
+            글제목변경(Array);
+        } else {
+            글제목변경(Array);
+        }
+    }
+
+
+    //console.log(arrLike);
+    //function sort(){
+        //const newLike = [...arrLike];
+        //const map1 = newLike.map();
+        //console.log(newLike.sort(function (a,b){{return b-a}}));
+    //}
+    // 라이크에는 좋아요 숫자가 들어가고
+    // arrLike 배열을 그대로 복사해와서
+    //
     return (
     <div className="App">
       <div className="black-nav">   {/*태그에 class 를 주고 싶으면 <div className="클래스명"*/}
         <div>Rulu Blog</div>
-        {/* 스타일은 무조건 {} 사용, JSX 에서 style 속성 집어넣을 때 style={ object 자료형으로 만든 스타일} */}
       </div>
-        {/*<img src={logo}/>*/}
-        {/*리액트에서 데이터 바인딩 쉽게 하는 법 --> {변수명}*/}
-        {/*src,id,href 등의 속성에도 {변수명,함수등} 사용 가능, 대부분의 곳에 {} 사용 가능*/}
-        {/*<h4>{ posts }</h4>*/}
-        <button onClick={ 제목바꾸기 }>제목 변경</button>
-        <button onClick={ 정렬 }>정렬</button>
+        <br/>
+        <button onClick={ titleChange }>제목변경</button>
+        <button onClick={ LikeSort }>정렬</button>
         <div className="list">
-            <h3> { 글제목[0] } <span onClick={ ()=>{ 따봉변경(따봉 + 1 )} }>👍</span> { 따봉 } </h3>
+           <a><h3> { 글제목[0] } <span onClick={ ()=>{ relike( like + 1 )} }>👍</span> { like }</h3>
             {/*이벤트 다루는 법 : onClick={클릭될 때 실행할 함수}, onClick={()=>{실행할 내용}}*/}
             <p>1월 2일 발행</p>
-            <hr/>
+               <hr/></a>
         </div>
         <div className="list">
-            <h3> { 글제목[1] }</h3>
+            <a><h3> { 글제목[1] } <span onClick={ ()=>{ relike2( like2 + 1 )} }>👍</span> { like2 }</h3>
             <p>1월 1일 발행</p>
-            <hr/>
+                <hr/></a>
         </div>
         <div className="list">
-            <h3> { 글제목[2] }</h3>
+           <a><h3> { 글제목[2] } <span onClick={ ()=>{ relike3( like3 + 1 )} }>👍</span> { like3 }</h3>
             <p>1월 1일 발행</p>
-            <hr/>
+               <hr/></a>
         </div>
 
         <Modal/>
