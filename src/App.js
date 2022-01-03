@@ -7,26 +7,29 @@ import './App.css';
 function App() {
     // var [a,b] = [10,100];
     // 데이터는 1. 변수에 넣거나 2. state 에 넣거나
-    let posts = '강남 고기 맛집';
-    let [따봉, 따봉변경] = useState(0);
-    //  따봉변경으로 따봉 값을 변경시켜야함
-    let [글제목2, 글제목변경2] = useState([ '여자 코트 추천', '덕소 맛집', '쌀국수 맛집 추천'])
-    let [글제목, 글제목변경] = useState(['곱창 맛집 추천', '덕소 맛집', '쌀국수 맛집 추천','여자 코트 추천']);
-    // useState 는 항상 [state 데이터, state 데이터 변경 함수] 가 들어감
-    // state 변경함수로 state 를 변경해야함
-    // a 에는 '값' 이 들어가고, b 에는 '값' 을 변경하는 함수가 들어감
-    // 웹이 App 처럼 동작하게 만들려면 state 에 데이터를 저장해야함
-    // state 는 데이터가 변경될 때 HTML 이 자동으로 재렌더링 된다. = HTML 이 새로고침 없이도 스무스하게 변경됨
-    // 자주 바뀌는, 중요한 데이터는 변수말고 state 로 저장해서 사용
-    // array, Object state 데이터 수정 방법 : 일단 변경함수 사용, 변경함수(대체할데이터), state 는 직접 변경X, deep copy 해서 그걸 건드려야함
-    function 제목바꾸기(){
-        var newArray = [...글제목]; // deep copy : 값 공유를 하지않고 서로 독립적인 값을 가지는 복사, state 의 복사본을 만들어서
-        newArray[0] = '붕어빵 맛집 추천';    // 수정
-        글제목변경(newArray);
-    }
-    function 정렬(){
-
-    }
+    const [post, setPost] =useState([
+        {
+            id:0,
+            title:'여자 코트 추천',
+            postDate:'1월 2일',
+            like: 0,
+        },{
+            id:1,
+            title:'여자 코트 추천',
+            postDate:'1월 1일 '
+            like: 0,
+        },{
+            id:2,
+            title:'여자 코트 추천',
+            postDate:'1월 2일 '
+            like: 0,
+        },{
+            id:3,
+            title:'여자 코트 추천',
+            postDate:'1월 3일 '
+            like: 0,
+        },
+    ]);
     return (
     <div className="App">
       <div className="black-nav">   {/*태그에 class 를 주고 싶으면 <div className="클래스명"*/}
@@ -37,26 +40,20 @@ function App() {
         {/*리액트에서 데이터 바인딩 쉽게 하는 법 --> {변수명}*/}
         {/*src,id,href 등의 속성에도 {변수명,함수등} 사용 가능, 대부분의 곳에 {} 사용 가능*/}
         {/*<h4>{ posts }</h4>*/}
-        <button onClick={ 제목바꾸기 }>제목 변경</button>
-        <button onClick={ 정렬 }>정렬</button>
-        <div className="list">
-            <h3> { 글제목[0] } <span onClick={ ()=>{ 따봉변경(따봉 + 1 )} }>👍</span> { 따봉 } </h3>
-            {/*이벤트 다루는 법 : onClick={클릭될 때 실행할 함수}, onClick={()=>{실행할 내용}}*/}
-            <p>1월 2일 발행</p>
-            <hr/>
-        </div>
-        <div className="list">
-            <h3> { 글제목[1] }</h3>
-            <p>1월 1일 발행</p>
-            <hr/>
-        </div>
-        <div className="list">
-            <h3> { 글제목[2] }</h3>
-            <p>1월 1일 발행</p>
-            <hr/>
-        </div>
+        {
+            post.map((data, id)=>(
+                <div key={id}>
+                    <div className="list">
+                        <h3> {data.title} <span>👍</span> {data.like } </h3>
+                        {/*이벤트 다루는 법 : onClick={클릭될 때 실행할 함수}, onClick={()=>{실행할 내용}}*/}
+                        <p>{data.postDate}발행</p>
+                        <hr/>
+                    </div>
+                    <Modal/>
+                </div>
+            ))
+        }
 
-        <Modal/>
 
     </div>
   );
